@@ -1,0 +1,109 @@
+{
+   "swagger":"2.0",
+   "info":{
+      "title":"Node API with Swagger Demo",
+      "description":"Below is the demo of Node API using Swagger and Postgres database",
+      "version":"1.0"
+   },
+   "produces":[
+      "application/json"
+   ],
+   "tags":[
+      {
+         "name":"employee",
+         "description":"Operations about Employee"
+      }
+   ],
+   "paths":{
+      "/create_employee":{
+         "post":{
+            "tags":[
+               "employee"
+            ],
+            "summary":"Create employee",
+            "operationId":"create_employee",
+            "parameters":[
+               {
+                  "name":"emp_firstname",
+                  "in":"formData",
+                  "required":true,
+                  "type":"string"
+               },
+               {
+                  "name":"emp_lastname",
+                  "in":"formData",
+                  "type":"string",
+                  "required":"true"
+               },
+               {
+                  "name":"emp_email",
+                  "in":"formData",
+                  "type":"string",
+                  "required":"true"
+               },
+               {
+                  "name":"emp_gender",
+                  "in":"formData",
+                  "type":"string",
+                  "enum":[
+                     "male",
+                     "female"
+                  ],
+                  "required":"true"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"Successful operation"
+               },
+               "408":{
+                  "description":"Error while adding employee"
+               }
+            }
+         }
+      },
+      "/view_employee":{
+         "get":{
+            "tags":[
+               "employee"
+            ],
+            "summary":"Get list of employees",            
+            "operationId":"view_employee",
+            "responses":{
+               "200":{
+                  "description":"Successful operation"
+               },
+               "408":{
+                  "description":"Error while fetching list"
+               }
+            }
+         }
+      },
+      "/delete_employee":{
+         "delete":{
+            "tags":[
+               "employee"
+            ],
+            "summary":"Delete employee by ID",            
+            "operationId":"delete_employee",
+            "parameters":[
+               {
+                  "name":"emp_id",
+                  "in":"formData",
+                  "required":true,
+                  "type":"integer",
+                  "format": "int64"
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid ID"
+               },
+               "404":{
+                  "description":"Employee not found"
+               }
+            }
+         }
+      }
+   }
+}

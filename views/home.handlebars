@@ -1,0 +1,103 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Home</li>
+  </ol>
+</nav>
+
+<div class="container">
+<form  action="/fileupload"   enctype="multipart/form-data" method="POST">
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">File</label>
+    <div class="col-sm-10">
+<div class="custom-file">
+  <input type="file" name="imagename" class="custom-file-input" id="imagename">
+  <label class="custom-file-label" for="customFile">Choose file</label>
+</div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="inputPassword3" class="col-sm-2 col-form-label">Size</label>
+    <div class="col-sm-10">
+        <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="false">
+    Select Size
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+   <a class="dropdown-item" href="#">Select Size</a>
+    <a class="dropdown-item" href="#">3x3</a>
+    <a class="dropdown-item" href="#">4x4</a>
+    <a class="dropdown-item" href="#">5x4</a>
+  </div>
+</div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+</form>
+
+</div>
+
+
+<script>
+// Add the following code if you want the name of the file appear on select
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
+ $('.dropdown-menu a').click(function(){
+    $('#dropdownMenuButton').text($(this).text());
+  });
+
+/**
+ * Upload the photos using ajax request.
+ *
+ * @param formData
+ */
+function uploadFiles(formData) {
+  console.log(formData)
+    $.ajax({
+        url: '/fileupload',
+        method: 'post',
+        data: formData,
+        processData: false,
+        contentType: false
+    }).done(function(resp)
+    {
+      console.log(resp);
+      if(resp.csv == undefined)
+      {
+        alert(resp);
+      }
+      else{
+        window.open(resp.csv);
+      }
+    })
+    .fail(function (xhr, status) {
+        alert(status);
+    });
+}
+
+$('form').submit(function(e){
+
+    e.preventDefault();
+    var sizevalue = 0;
+    var filedata = $('#imagename')[0].files[0]
+    console.log(filedata)
+    var sizeText =  $('#dropdownMenuButton').text();
+
+    if(sizeText == "3x3") sizevalue = 6;
+    else if(sizeText == "4x4") sizevalue = 8;
+    else if(sizeText == "5x4") sizevalue = 9;
+
+ const data = new FormData();
+                 data.append("imagename", filedata);
+                 data.append("size", sizevalue);
+                 data.append("sizeText", sizeText);
+    uploadFiles(data);
+  });
+</script>
+
